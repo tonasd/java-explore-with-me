@@ -9,6 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <groupId>ru.practicum.stats</groupId>
     <artifactId>service</artifactId>
 
     <properties>
@@ -51,17 +52,26 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>ru.practicum.stats</groupId>
             <artifactId>dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

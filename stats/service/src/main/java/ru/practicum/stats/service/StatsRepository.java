@@ -10,14 +10,16 @@ import java.util.List;
 
 public interface StatsRepository extends JpaRepository<HitRecord, Long> {
 
-    @Query(value = "select new ru.practicum.HitView(h.app, h.uri, count(distinct h.ip) as hits) " +
+    @Query(value = "select new ru.practicum.stats.service.model" +
+            ".HitView(h.app, h.uri, count(distinct h.ip) as hits) " +
             "from HitRecord h " +
             "where (h.created between :start and :end) " +
             "group by h.app, h.uri " +
             "order by hits desc")
     List<HitView> getStatsWithDistinctIps(LocalDateTime start, LocalDateTime end);
 
-    @Query(value = "select new ru.practicum.HitView(h.app, h.uri, count(h.ip) as hits) " +
+    @Query(value = "select new ru.practicum.stats.service.model" +
+            ".HitView(h.app, h.uri, count(h.ip) as hits) " +
             "from HitRecord h " +
             "where (h.created between :start and :end) " +
             "group by h.app, h.uri " +
