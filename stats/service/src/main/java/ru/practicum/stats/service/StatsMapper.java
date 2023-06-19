@@ -1,4 +1,9 @@
-package ru.practicum;
+package ru.practicum.stats.service;
+
+import ru.practicum.stats.dto.CreationDto;
+import ru.practicum.stats.dto.ViewDto;
+import ru.practicum.stats.service.model.HitRecord;
+import ru.practicum.stats.service.model.HitView;
 
 public class StatsMapper {
 

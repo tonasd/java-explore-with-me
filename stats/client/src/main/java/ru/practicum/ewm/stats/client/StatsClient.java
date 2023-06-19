@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.ewm.stats.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +8,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.stats.dto.CreationDto;
+import ru.practicum.stats.dto.ViewDto;
 
 import javax.validation.constraints.NotNull;
 import java.net.InetAddress;
@@ -74,7 +76,7 @@ public class StatsClient {
         parameters.put("start", start.format(formatter));
         parameters.put("end", end.format(formatter));
 
-        parameters.put("unique", unique!= null ? unique.toString() : null);
+        parameters.put("unique", unique != null ? unique.toString() : null);
 
         if (uris != null && !uris.isEmpty()) {
             parameters.put("uris",

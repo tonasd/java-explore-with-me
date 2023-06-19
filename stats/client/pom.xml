@@ -30,7 +30,7 @@
         </dependency>
 
         <dependency>
-            <groupId>ru.practicum</groupId>
+            <groupId>ru.practicum.stats</groupId>
             <artifactId>dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>

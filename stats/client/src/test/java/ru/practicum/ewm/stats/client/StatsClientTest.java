@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.ewm.stats.client;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.stats.dto.CreationDto;
 
 import java.net.InetAddress;
 import java.net.URI;

@@ -1,8 +1,11 @@
-package ru.practicum;
+package ru.practicum.stats.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.stats.dto.CreationDto;
+import ru.practicum.stats.dto.ViewDto;
+import ru.practicum.stats.service.model.HitView;
 
 import java.net.URI;
 import java.time.LocalDateTime;
