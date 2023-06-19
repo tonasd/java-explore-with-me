@@ -29,7 +29,7 @@ public class StatsService {
             result = repository.getStats(start, end);
         }
 
-        if (uris != null) {
+        if (uris != null && !uris.isEmpty()) {
             result = result.stream()
                     .filter(hitView -> uris.contains(hitView.getUri()))
                     .collect(Collectors.toUnmodifiableList());
