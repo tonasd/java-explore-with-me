@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -14,9 +15,9 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleWrongRequestParameters(final ConstraintViolationException e) {
+    protected ApiError handleWrongRequestParameters(final RuntimeException e) {
         return ApiError.builder()
                 .message(e.getMessage())
                 .reason("Incorrectly made request")
@@ -56,6 +57,16 @@ public class ErrorHandler {
                         e.getFieldError().getField(),
                         e.getFieldError().getDefaultMessage(),
                         String.valueOf(e.getFieldError().getRejectedValue())))
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ApiError handleRulesViolation(final RulesViolationException e) {
+        return ApiError.builder()
+                .message(e.getMessage())
+                .reason("For the requested operation the conditions are not met.")
+                .status(HttpStatus.CONFLICT)
                 .build();
     }
 }
