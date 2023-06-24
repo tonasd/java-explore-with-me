@@ -7,12 +7,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.practicum.ewm.controller.admin.AdminUsersController;
 import ru.practicum.ewm.service.UserService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebMvcTest(value = AdminController.class)
-class AdminControllerTest {
+@WebMvcTest(value = AdminUsersController.class)
+class AdminUsersControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

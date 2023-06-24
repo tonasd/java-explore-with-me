@@ -3,6 +3,7 @@ package ru.practicum.ewm.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,7 +14,7 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleWrongRequestParameters(final ConstraintViolationException e) {
         return ApiError.builder()
@@ -41,6 +42,20 @@ public class ErrorHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .reason("The required object was not found.")
                 .message(e.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleWrongDtoFieldValue(final MethodArgumentNotValidException e) {
+        log.warn(e.getMessage());
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .reason("Incorrectly made request.")
+                .message(String.format("Field: %s. Error: %s. Value: %s",
+                        e.getFieldError().getField(),
+                        e.getFieldError().getDefaultMessage(),
+                        String.valueOf(e.getFieldError().getRejectedValue())))
                 .build();
     }
 }
