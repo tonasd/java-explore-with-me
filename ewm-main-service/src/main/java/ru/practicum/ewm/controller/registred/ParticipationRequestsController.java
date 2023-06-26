@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.ParticipationRequestDto;
 import ru.practicum.ewm.service.ParticipationRequestService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j

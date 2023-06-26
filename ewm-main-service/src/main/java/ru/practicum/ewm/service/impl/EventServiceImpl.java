@@ -6,10 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.event.EventFullDto;
-import ru.practicum.ewm.dto.event.EventShortDto;
-import ru.practicum.ewm.dto.event.NewEventDto;
-import ru.practicum.ewm.dto.event.UpdateEventUserRequest;
+import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.exception.CategoryNotFoundException;
 import ru.practicum.ewm.exception.EventNotFoundException;
 import ru.practicum.ewm.exception.RulesViolationException;
@@ -22,6 +19,7 @@ import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.repository.projection.EventShortView;
 import ru.practicum.ewm.service.EventService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +30,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> findAllEventsOfUser(long userId, int from, int size) {
@@ -62,7 +61,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId));
 
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             log.info("Attempt to get full information about eventId={} from not initiator userId={}", event.getId(), userId);
             throw new EventNotFoundException(eventId);
         }
@@ -76,7 +75,7 @@ public class EventServiceImpl implements EventService {
         checkUserExists(userId);
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId));
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             log.info("Attempt to update eventId={} from not initiator userId={}", event.getId(), userId);
             throw new EventNotFoundException(eventId);
         }
@@ -97,7 +96,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     private void checkUserExists(long userId) {
-        if(!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException(userId);
         }
     }

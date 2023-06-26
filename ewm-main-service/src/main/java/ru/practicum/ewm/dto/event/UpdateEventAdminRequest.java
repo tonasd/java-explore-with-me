@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
-public class UpdateEventUserRequest {
+public class UpdateEventAdminRequest {
     @Size(min = 20, max = 2000)
     String annotation;
 
@@ -35,12 +35,12 @@ public class UpdateEventUserRequest {
 
     Location location;
 
-    @AssertTrue(message = "Event must start not earlier than two hours from now")
+    @AssertTrue(message = "Event must start not earlier than one hour from now")
     protected boolean isStartsFromNowAndLater() {
-        return Objects.isNull(eventDate) || eventDate.isAfter(LocalDateTime.now().plusHours(2));
+        return Objects.isNull(eventDate) || eventDate.isAfter(LocalDateTime.now().plusHours(1));
     }
 
     public enum StateAction {
-        SEND_TO_REVIEW, CANCEL_REVIEW
+        PUBLISH_EVENT, REJECT_EVENT
     }
 }

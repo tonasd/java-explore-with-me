@@ -81,5 +81,5 @@ CREATE TABLE IF NOT EXISTS public.requests (
 COMMENT ON COLUMN public.requests.id IS 'Идентификатор заявки';
 COMMENT ON COLUMN public.requests.event_id IS 'Идентификатор события';
 COMMENT ON COLUMN public.requests.requester_id IS 'Идентификатор пользователя, отправившего заявку';
-COMMENT ON COLUMN public.requests.stataus IS 'Статус заявки';
+COMMENT ON COLUMN public.requests.status IS 'Статус заявки';
 COMMENT ON COLUMN public.requests.created IS 'Дата и время создания заявки';
