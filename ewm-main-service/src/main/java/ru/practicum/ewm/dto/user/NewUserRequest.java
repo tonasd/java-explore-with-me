@@ -1,9 +1,9 @@
 package ru.practicum.ewm.dto.user;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -11,9 +11,12 @@ import javax.validation.constraints.Size;
  * Dto for creation of new user
  */
 public class NewUserRequest {
-    @NotNull @Email
+    @NotBlank
+    @Size(min = 6, max = 254)
+    @Email
     private String email;
 
-    @NotNull @Size(min = 2, max = 250)
+    @NotBlank
+    @Size(min = 2, max = 250)
     private String name;
 }

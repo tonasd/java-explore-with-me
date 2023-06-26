@@ -1,9 +1,10 @@
 package ru.practicum.ewm.dto.event;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.model.RequestStatus;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data

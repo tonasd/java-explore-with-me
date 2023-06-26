@@ -68,12 +68,12 @@ public class AdminEventServiceImpl implements AdminEventService {
         UpdateEventAdminRequest.StateAction stateAction = dto.getStateAction();
         if (stateAction != null && stateAction.equals(UpdateEventAdminRequest.StateAction.PUBLISH_EVENT)
                 && !event.getState().equals(EventState.PENDING)) {
-            throw new RulesViolationException("EventId" + eventId + "not in PENDING state, cannot be published");
+            throw new RulesViolationException("EventId=" + eventId + " not in PENDING state, cannot be published");
         }
         // событие можно отклонить, только если оно еще не опубликовано (Ожидается код ошибки 409)
         if (stateAction != null && stateAction.equals(UpdateEventAdminRequest.StateAction.REJECT_EVENT)
                 && !event.getState().equals(EventState.PENDING)) {
-            throw new RulesViolationException("EventId" + eventId + "not in PENDING state, cannot be rejected");
+            throw new RulesViolationException("EventId=" + eventId + " not in PENDING state, cannot be rejected");
         }
 
         Category category = null;
@@ -96,16 +96,17 @@ public class AdminEventServiceImpl implements AdminEventService {
         return 0;
     }
 
-    /* based on:
-     * Criteria API  https://www.baeldung.com/hibernate-criteria-queries
-     * Pagination https://www.baeldung.com/jpa-pagination
-     */
+
     private static void checkEventDate(LocalDateTime eventDate) {
         if (eventDate.isBefore(LocalDateTime.now().plusHours(1))) {
             throw new RulesViolationException("Event cannot starts less than an hour from now to be moderated");
         }
     }
 
+    /* based on:
+     * Criteria API  https://www.baeldung.com/hibernate-criteria-queries
+     * Pagination https://www.baeldung.com/jpa-pagination
+     */
     private List<Event> findByCriteria(List<Long> users,
                                        List<EventState> states,
                                        List<Integer> categories,
@@ -154,6 +155,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         //pagination
         query.setFirstResult(from);
         query.setMaxResults(size);
+
         List<Event> results = query.getResultList();
         return results;
     }

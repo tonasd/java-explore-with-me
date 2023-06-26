@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDateTime;
 
 @Entity
