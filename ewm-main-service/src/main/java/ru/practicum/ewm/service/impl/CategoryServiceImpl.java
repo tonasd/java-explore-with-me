@@ -1,6 +1,7 @@
 package ru.practicum.ewm.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.event.CategoryDto;
@@ -10,6 +11,9 @@ import ru.practicum.ewm.mapper.CategoryMapper;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.service.CategoryService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +43,23 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = repository.findById(catId).orElseThrow(() -> new CategoryNotFoundException(catId));
         category.setName(newName);
         category = repository.save(category);
+        return CategoryMapper.mapToCategoryDto(category);
+    }
+
+    @Override
+    public List<CategoryDto> findAll(int from, int size) {
+
+        PageRequest page = PageRequest.of(from / size, size);
+
+        return repository.findAll(page).get()
+                .map(CategoryMapper::mapToCategoryDto)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public CategoryDto findOne(int catId) {
+        Category category = repository.findById(catId)
+                .orElseThrow(() -> new CategoryNotFoundException(catId));
         return CategoryMapper.mapToCategoryDto(category);
     }
 

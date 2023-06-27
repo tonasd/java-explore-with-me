@@ -156,7 +156,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Transactional(propagation = Propagation.MANDATORY)
     private void checkUserExists(long userId) {
         if (!userRepository.existsById(userId)) {
-
             throw new UserNotFoundException(userId);
         }
     }

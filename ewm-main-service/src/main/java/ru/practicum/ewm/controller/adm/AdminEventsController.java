@@ -1,7 +1,8 @@
-package ru.practicum.ewm.controller.admin;
+package ru.practicum.ewm.controller.adm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.UpdateEventAdminRequest;
@@ -9,6 +10,8 @@ import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.service.AdminEventService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/events")
 @RequiredArgsConstructor
+@Validated
 public class AdminEventsController {
     private final AdminEventService service;
 
@@ -26,8 +30,8 @@ public class AdminEventsController {
             @RequestParam(required = false) List<Integer> categories, // список id категорий в которых будет вестись поиск
             @RequestParam(required = false) LocalDateTime rangeStart, // дата и время не раньше которых должно произойти событие
             @RequestParam(required = false) LocalDateTime rangeEnd, // дата и время не позже которых должно произойти событие
-            @RequestParam(defaultValue = "0") int from, // количество событий, которые нужно пропустить для формирования текущего набора
-            @RequestParam(defaultValue = "10") int size // количество событий в наборе
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from, // количество событий, которые нужно пропустить для формирования текущего набора
+            @RequestParam(defaultValue = "10") @Positive int size // количество событий в наборе
             ) {
         log.info("GET /admin/events users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);

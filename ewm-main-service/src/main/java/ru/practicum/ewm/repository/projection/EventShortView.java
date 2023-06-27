@@ -5,6 +5,8 @@ import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 
+
+//TODO:delete interface
 public interface EventShortView {
     long getId();
     String getTitle();

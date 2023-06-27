@@ -2,21 +2,20 @@ package ru.practicum.ewm.mapper;
 
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.model.*;
-import ru.practicum.ewm.repository.projection.EventShortView;
 
 import java.time.LocalDateTime;
 
 public class EventMapper {
-    public static EventShortDto mapToEventShortDto(EventShortView eventShortView, long confirmedRequests, long views) {
+    public static EventShortDto mapToEventShortDto(Event event, long confirmedRequests, long views) {
        return EventShortDto.builder()
-               .id(eventShortView.getId())
-               .eventDate(eventShortView.getEventDate())
+               .id(event.getId())
+               .eventDate(event.getEventDate())
                .confirmedRequests(confirmedRequests)
-               .annotation(eventShortView.getAnnotation())
-               .category(CategoryMapper.mapToCategoryDto(eventShortView.getCategory()))
-               .initiator(UserMapper.mapUserToUserShortDto(eventShortView.getInitiator()))
-               .paid(eventShortView.isPaid())
-               .title(eventShortView.getTitle())
+               .annotation(event.getAnnotation())
+               .category(CategoryMapper.mapToCategoryDto(event.getCategory()))
+               .initiator(UserMapper.mapUserToUserShortDto(event.getInitiator()))
+               .paid(event.isPaid())
+               .title(event.getTitle())
                .views(views)
                .build();
     }
