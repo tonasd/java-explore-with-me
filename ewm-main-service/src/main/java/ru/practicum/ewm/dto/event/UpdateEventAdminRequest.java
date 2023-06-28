@@ -28,7 +28,7 @@ public class UpdateEventAdminRequest {
 
     Boolean requestModeration;
 
-    @Size(min = 2, max = 120)
+    @Size(min = 3, max = 120)
     String title;
 
     StateAction stateAction;

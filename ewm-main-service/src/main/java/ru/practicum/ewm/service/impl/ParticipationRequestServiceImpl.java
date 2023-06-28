@@ -47,13 +47,11 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     "Please request for participation only in published events");
         }
 
-        /* TODO: delete, this check is on initiator side
-
         // если у события достигнут лимит запросов на участие - необходимо вернуть ошибку (Ожидается код ошибки 409)
         long requestsCount = requestRepository.countByEventIdIsAndStatusNot(forEventId, RequestStatus.CANCELED);
         if (event.getParticipantLimit() != 0 && requestsCount >= event.getParticipantLimit()) {
             throw new RulesViolationException("Number of participants for the event has reached maximum");
-        }*/
+        }
 
         ParticipationRequest request = requestRepository.save(RequestMapper.map(requester, event));
         return RequestMapper.map(request);

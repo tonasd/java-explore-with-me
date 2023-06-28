@@ -155,13 +155,13 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private long getViews(long eventId) {
+    long getViews(long eventId) {
         //TODO: implement
         return 0;
     }
 
     @Transactional(readOnly = true)
-    private long getConfirmedRequests(long eventId) {
+    long getConfirmedRequests(long eventId) {
         return requestRepository.countByEventIdIsAndStatus(eventId, RequestStatus.CONFIRMED);
     }
 

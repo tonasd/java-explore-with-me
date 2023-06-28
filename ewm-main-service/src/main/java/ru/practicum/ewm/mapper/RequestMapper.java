@@ -26,7 +26,7 @@ public class RequestMapper {
         request.setRequester(requester);
         request.setEvent(event);
         request.setCreated(LocalDateTime.now());
-        if (event.isRequestModeration()) {
+        if (event.isRequestModeration() && event.getParticipantLimit() != 0) {
             request.setStatus(RequestStatus.PENDING);
         } else {
             request.setStatus(RequestStatus.CONFIRMED);

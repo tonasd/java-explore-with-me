@@ -100,6 +100,7 @@ public class EventMapper {
         }
         if (UpdateEventAdminRequest.StateAction.PUBLISH_EVENT.equals(dto.getStateAction())) {
             event.setState(EventState.PUBLISHED);
+            event.setPublishedOn(LocalDateTime.now());
         }
 
         return event;

@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -60,4 +61,8 @@ public class Event {
 
     @Column(name = "location_lon", nullable = false)
     Float locationLon;
+
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "events")
+    Set<Compilation> compilations;
 }
