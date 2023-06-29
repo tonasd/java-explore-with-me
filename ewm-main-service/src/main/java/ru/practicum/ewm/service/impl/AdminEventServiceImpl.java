@@ -1,8 +1,8 @@
 package ru.practicum.ewm.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.event.EventFullDto;
@@ -16,7 +16,10 @@ import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.repository.ParticipationRequestRepository;
+import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.AdminEventService;
+import ru.practicum.ewm.stats.Stats;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -30,11 +33,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-public class AdminEventServiceImpl implements AdminEventService {
-    private final EventRepository eventRepository;
-    private final CategoryRepository categoryRepository;
-    private final SessionFactory factory;
+public class AdminEventServiceImpl extends EventServiceImpl implements AdminEventService {
+    @Autowired
+    public AdminEventServiceImpl(EventRepository eventRepository, UserRepository userRepository, CategoryRepository categoryRepository, ParticipationRequestRepository requestRepository, SessionFactory factory, Stats stats) {
+        super(eventRepository, userRepository, categoryRepository, requestRepository, factory, stats);
+    }
+
+    private static void checkEventDate(LocalDateTime eventDate) {
+        if (eventDate.isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new RulesViolationException("Event cannot starts less than an hour from now to be moderated");
+        }
+    }
 
     @Override
     public List<EventFullDto> findEventsWith(
@@ -84,23 +93,6 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         event = eventRepository.save(EventMapper.mapToEvent(event, dto, category));
         return EventMapper.mapToEventFullDto(event, getConfirmedRequests(eventId), getViews(eventId));
-    }
-
-    private long getViews(long eventId) {
-        //TODO: implement
-        return 0;
-    }
-
-    private long getConfirmedRequests(long eventId) {
-        //TODO: implement
-        return 0;
-    }
-
-
-    private static void checkEventDate(LocalDateTime eventDate) {
-        if (eventDate.isBefore(LocalDateTime.now().plusHours(1))) {
-            throw new RulesViolationException("Event cannot starts less than an hour from now to be moderated");
-        }
     }
 
     /* based on:

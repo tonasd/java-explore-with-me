@@ -4,15 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.event.CategoryDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.service.EventService;
+import ru.practicum.ewm.stats.Stats;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +26,7 @@ import java.util.Objects;
 @Validated
 public class PublicEventController {
     private final EventService eventService;
+    private final Stats stats;
 
     @GetMapping
     public List<EventShortDto> findAll(
@@ -35,8 +38,9 @@ public class PublicEventController {
             @RequestParam(defaultValue = "false") boolean onlyAvailable,
             @RequestParam(required = false) EventSort sort,
             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(defaultValue = "10") @Positive int size
-    ) {
+            @RequestParam(defaultValue = "10") @Positive int size,
+            HttpServletRequest request
+    ) throws UnknownHostException {
         log.info("GET /events text={}, categories={}, paid={}, rangeStart={}, rangeEnd={}," +
                         " onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd,
@@ -46,17 +50,18 @@ public class PublicEventController {
             rangeStart = LocalDateTime.now();
         }
         List<EventState> states = List.of(EventState.PUBLISHED); // должны быть только опубликованные события
+        stats.saveRequest(request);
 
-        //TODO: информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики
         return eventService.findAll(text, categories, paid,
                 rangeStart, rangeEnd, onlyAvailable,
                 states, sort, from, size);
     }
 
     @GetMapping("/{id}")
-    public EventFullDto findEvent(@PathVariable long id) {
+    public EventFullDto findEvent(@PathVariable long id, HttpServletRequest request) throws UnknownHostException {
         log.info("GET /events/{}", id);
-        //TODO: информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики
+        stats.saveRequest(request);
+
         return eventService.findEvent(id, EventState.PUBLISHED);
     }
 

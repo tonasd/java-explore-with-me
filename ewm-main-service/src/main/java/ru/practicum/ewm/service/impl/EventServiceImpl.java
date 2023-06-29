@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.NotYetImplementedException;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +26,7 @@ import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.EventService;
+import ru.practicum.ewm.stats.Stats;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
@@ -33,14 +35,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service
+@Service("eventService")
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final ParticipationRequestRepository requestRepository;
-    private final SessionFactory factory;
+    protected final EventRepository eventRepository;
+    protected final UserRepository userRepository;
+    protected final CategoryRepository categoryRepository;
+    protected final ParticipationRequestRepository requestRepository;
+    protected final SessionFactory factory;
+    protected final Stats stats;
 
     @Override
     public List<EventShortDto> findAll(
@@ -149,15 +152,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    private void checkUserExists(long userId) {
+    void checkUserExists(long userId) {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException(userId);
         }
     }
 
     long getViews(long eventId) {
-        //TODO: implement
-        return 0;
+        return stats.getViewsForEvent(eventId);
     }
 
     @Transactional(readOnly = true)
