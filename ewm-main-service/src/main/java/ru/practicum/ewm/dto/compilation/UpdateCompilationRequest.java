@@ -11,7 +11,7 @@ import java.util.List;
 public class UpdateCompilationRequest {
     Boolean pinned;
 
-    @Pattern(regexp = "\\A(?!\\s*\\Z).+")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "title must not be blank(have only spaces)")
     @Size(min = 1, max = 50)
     String title;
 

@@ -23,13 +23,14 @@ public class PublicCategoryController {
     public List<CategoryDto> findAll(@RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                      @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("GET /categories from={}, size={}", from, size);
+
         return categoryService.findAll(from, size);
     }
 
     @GetMapping("/{catId}")
     public CategoryDto findOne(@PathVariable int catId) {
         log.info("GET /categories/{}", catId);
+
         return categoryService.findOne(catId);
     }
-
 }

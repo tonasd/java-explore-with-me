@@ -47,7 +47,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     "Please request for participation only in published events");
         }
 
-        //TODO: всё-таки может его удалить
         // если у события достигнут лимит запросов на участие - необходимо вернуть ошибку (Ожидается код ошибки 409)
         long requestsCount = requestRepository.countByEventIdIsAndStatus(forEventId, RequestStatus.CONFIRMED);
         if (event.getParticipantLimit() != 0 && requestsCount >= event.getParticipantLimit()) {
@@ -115,7 +114,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .findAllByEventIdAndIdIn(eventId, statusUpdateDto.getRequestIds());
 
         int participantLimit = event.getParticipantLimit();
-        Long confirmedRequests = requestRepository.countByEventIdIsAndStatus(eventId, RequestStatus.CONFIRMED);
+        long confirmedRequests = requestRepository.countByEventIdIsAndStatus(eventId, RequestStatus.CONFIRMED);
         // если для события лимит заявок равен 0 или отключена пре-модерация заявок, то подтверждение заявок не требуется
         if (event.isRequestModeration() || participantLimit != 0) {
 

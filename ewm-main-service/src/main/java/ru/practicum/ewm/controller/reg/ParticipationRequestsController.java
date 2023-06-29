@@ -24,18 +24,21 @@ public class ParticipationRequestsController {
             @RequestParam long eventId
     ) {
         log.info("POST /users/{}/requests for eventId={}", userId, eventId);
+
         return service.createRequest(userId, eventId);
     }
 
     @GetMapping
     public List<ParticipationRequestDto> findUserParticipationRequests(@PathVariable long userId) {
         log.info("GET /users/{}/requests", userId);
+
         return service.findRequestsOfUser(userId);
     }
 
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto cancelParticipationRequest(@PathVariable long userId, @PathVariable long requestId) {
         log.info("PATCH /users/{}/requests/{}/cancel", userId, requestId);
+
         return service.cancelParticipationRequest(userId, requestId);
     }
 }

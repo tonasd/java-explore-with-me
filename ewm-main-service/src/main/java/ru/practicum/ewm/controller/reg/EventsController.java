@@ -30,6 +30,7 @@ public class EventsController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         log.info("GET users/{}/events from={}, size={}", userId, from, size);
+
         return eventService.findAllEventsOfUser(userId, from, size);
     }
 
@@ -37,12 +38,14 @@ public class EventsController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@PathVariable long userId, @RequestBody @Valid NewEventDto dto) {
         log.info("POST users/{}/events with body {}", userId, dto);
+
         return eventService.createEvent(userId, dto);
     }
 
     @GetMapping("/{eventId}")
     public EventFullDto findEvent(@PathVariable long userId, @PathVariable long eventId) {
         log.info("GET users/{}/events/{}", userId, eventId);
+
         return eventService.findEvent(userId, eventId);
 
     }
@@ -54,13 +57,14 @@ public class EventsController {
             @RequestBody @Valid UpdateEventUserRequest dto
     ) {
         log.info("PATCH users/{}/events/{}", userId, eventId);
-        return eventService.updateEvent(userId, eventId, dto);
 
+        return eventService.updateEvent(userId, eventId, dto);
     }
 
     @GetMapping("/{eventId}/requests")
     public List<ParticipationRequestDto> findAllRequestsForEvent(@PathVariable long userId, @PathVariable long eventId) {
         log.info("GET users/{}/events/{}/requests", userId, eventId);
+
         return requestService.findAllRequestsForEvent(userId, eventId);
     }
 
@@ -71,7 +75,7 @@ public class EventsController {
             @RequestBody @Valid EventRequestStatusUpdateRequest statusUpdateDto
     ) {
         log.info("PATCH users/{}/events/{}/requests", userId, eventId);
+
         return requestService.updateStatus(userId, eventId, statusUpdateDto);
     }
-
 }

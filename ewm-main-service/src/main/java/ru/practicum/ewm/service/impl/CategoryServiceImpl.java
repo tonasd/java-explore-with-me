@@ -32,7 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
         if (!repository.existsById(catId)) {
             throw new CategoryNotFoundException(catId);
         }
-        // TODO: to be implemented Обратите внимание: с категорией не должно быть связано ни одного события.
 
         repository.deleteById(catId);
     }

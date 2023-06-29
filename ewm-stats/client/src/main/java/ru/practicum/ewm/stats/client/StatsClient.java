@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class StatsClient {
     private final RestTemplate rest;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
@@ -49,7 +48,6 @@ public class StatsClient {
         ResponseEntity<Void> response = rest.postForEntity("/hit", creationDto, void.class);
 
         if (response.getStatusCode().isError()) {
-            // TODO: 19.06.2023 check if this suitable for main service
             throw new RuntimeException("Data for stats client is incorrect");
         }
     }
@@ -58,7 +56,6 @@ public class StatsClient {
                                   LocalDateTime end,
                                   Boolean onlyForUniqueIps,
                                   List<URI> uris) {
-
 
         ViewDto[] resultArray = rest.getForObject("/stats?start={start}&end={end}&unique={unique}&uris={uris}",
                 ViewDto[].class,

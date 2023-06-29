@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface ParticipationRequestRepository extends JpaRepository<ParticipationRequest, Long> {
-    long countByEventIdIsAndStatusNot(long eventId, RequestStatus state);
 
     Stream<ParticipationRequest> findAllByRequesterId(long userId);
 

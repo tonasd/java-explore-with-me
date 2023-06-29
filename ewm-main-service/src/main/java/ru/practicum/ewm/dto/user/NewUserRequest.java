@@ -7,9 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-/**
- * Dto for creation of new user
- */
 public class NewUserRequest {
     @NotBlank
     @Size(min = 6, max = 254)

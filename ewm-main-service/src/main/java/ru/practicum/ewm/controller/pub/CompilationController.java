@@ -26,12 +26,14 @@ public class CompilationController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         log.info("GET /compilations pinned={}, from={}, size={}", pinned, from, size);
+
         return compilationService.show(pinned, from, size);
     }
 
     @GetMapping("/{compId}")
     public CompilationDto showCompilationById(@PathVariable long compId) {
         log.info("GET /compilations/{}", compId);
+
         return compilationService.show(compId);
     }
 }

@@ -30,6 +30,7 @@ public class AdminUsersController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         log.info("GET {} ids={}, from={}, size={}",API_PREFIX, ids, from, size);
+
         return userService.find(ids, from, size);
     }
 
@@ -37,6 +38,7 @@ public class AdminUsersController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid NewUserRequest dto) {
         log.info("POST {} with body{}",API_PREFIX, dto);
+
         return userService.create(dto);
     }
 

@@ -37,5 +37,4 @@ public class AdminCompilationsController {
         log.info("PATCH /admin/compilations/{}  {}", compId, dto);
         return compilationService.update(compId, dto);
     }
-
 }

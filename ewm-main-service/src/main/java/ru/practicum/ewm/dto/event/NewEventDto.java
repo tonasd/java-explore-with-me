@@ -38,10 +38,8 @@ public class NewEventDto {
     @NotNull
     Location location;
 
-
     @AssertTrue(message = "Event must start not earlier than two hours from now")
     private boolean isStarts2HoursFromNowAndLater() {
         return Objects.isNull(eventDate) || eventDate.isAfter(LocalDateTime.now().plusHours(2));
     }
-
 }

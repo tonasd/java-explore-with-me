@@ -2,8 +2,8 @@ package ru.practicum.ewm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
@@ -47,9 +47,8 @@ public class CompilationServiceImpl implements CompilationService {
 
         Compilation comp = compilationRepository.save(CompilationMapper.mapToCompilation(dto, new HashSet<>(events)));
         System.out.println(comp);
-        CompilationDto compilationDto = CompilationMapper.mapToCompilationDto(comp, getEventShortDtos(comp));
 
-        return compilationDto;
+        return CompilationMapper.mapToCompilationDto(comp, getEventShortDtos(comp));
     }
 
     @Override
@@ -86,7 +85,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional(readOnly = true)
     public List<CompilationDto> show(Boolean pinned, int from, int size) {
-        Page<Compilation> comps;
+        Slice<Compilation> comps;
 
         PageRequest page = PageRequest.of(from / size, size);
         if (Objects.nonNull(pinned)) {

@@ -181,7 +181,6 @@ public class EventServiceImpl implements EventService {
             int from,
             int size
     ) {
-
         Session session = factory.openSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Event> cr = cb.createQuery(Event.class);
