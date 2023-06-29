@@ -1,7 +1,10 @@
 package ru.practicum.ewm.service;
 
 import ru.practicum.ewm.controller.pub.EventSort;
-import ru.practicum.ewm.dto.event.*;
+import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.EventShortDto;
+import ru.practicum.ewm.dto.event.NewEventDto;
+import ru.practicum.ewm.dto.event.UpdateEventUserRequest;
 import ru.practicum.ewm.model.EventState;
 
 import javax.validation.constraints.Positive;

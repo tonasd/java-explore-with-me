@@ -31,8 +31,9 @@ import java.util.stream.Collectors;
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
-   @Qualifier(value = "eventService")
+    @Qualifier(value = "eventService")
     private final EventServiceImpl eventService;
+
     @Override
     @Transactional
     public CompilationDto create(NewCompilationDto dto) {
@@ -87,7 +88,7 @@ public class CompilationServiceImpl implements CompilationService {
     public List<CompilationDto> show(Boolean pinned, int from, int size) {
         Page<Compilation> comps;
 
-        PageRequest page = PageRequest.of(from/size, size);
+        PageRequest page = PageRequest.of(from / size, size);
         if (Objects.nonNull(pinned)) {
             comps = compilationRepository.findAllByPinnedIs(pinned, page);
         } else {

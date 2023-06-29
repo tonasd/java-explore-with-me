@@ -7,17 +7,17 @@ import java.time.LocalDateTime;
 
 public class EventMapper {
     public static EventShortDto mapToEventShortDto(Event event, long confirmedRequests, long views) {
-       return EventShortDto.builder()
-               .id(event.getId())
-               .eventDate(event.getEventDate())
-               .confirmedRequests(confirmedRequests)
-               .annotation(event.getAnnotation())
-               .category(CategoryMapper.mapToCategoryDto(event.getCategory()))
-               .initiator(UserMapper.mapUserToUserShortDto(event.getInitiator()))
-               .paid(event.isPaid())
-               .title(event.getTitle())
-               .views(views)
-               .build();
+        return EventShortDto.builder()
+                .id(event.getId())
+                .eventDate(event.getEventDate())
+                .confirmedRequests(confirmedRequests)
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.mapToCategoryDto(event.getCategory()))
+                .initiator(UserMapper.mapUserToUserShortDto(event.getInitiator()))
+                .paid(event.isPaid())
+                .title(event.getTitle())
+                .views(views)
+                .build();
     }
 
     public static Event mapToEvent(User initiator, NewEventDto dto, Category category) {
@@ -62,13 +62,13 @@ public class EventMapper {
     public static Event mapToEvent(Event event, UpdateEventUserRequest dto, Category category) {
         if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
         if (dto.getTitle() != null) event.setTitle(dto.getTitle());
-        if(category != null) event.setCategory(category);
-        if(dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if(dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if(dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if(dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if(dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-        if(dto.getLocation() != null){
+        if (category != null) event.setCategory(category);
+        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
+        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
+        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
+        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        if (dto.getLocation() != null) {
             event.setLocationLon(dto.getLocation().getLon());
             event.setLocationLat(dto.getLocation().getLat());
         }
@@ -85,13 +85,13 @@ public class EventMapper {
     public static Event mapToEvent(Event event, UpdateEventAdminRequest dto, Category category) {
         if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
         if (dto.getTitle() != null) event.setTitle(dto.getTitle());
-        if(category != null) event.setCategory(category);
-        if(dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if(dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if(dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if(dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if(dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-        if(dto.getLocation() != null){
+        if (category != null) event.setCategory(category);
+        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
+        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
+        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
+        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        if (dto.getLocation() != null) {
             event.setLocationLon(dto.getLocation().getLon());
             event.setLocationLat(dto.getLocation().getLat());
         }

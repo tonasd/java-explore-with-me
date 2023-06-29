@@ -2,14 +2,11 @@ package ru.practicum.ewm.mapper;
 
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
-import ru.practicum.ewm.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
 
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CompilationMapper {
     public static Compilation mapToCompilation(NewCompilationDto dto, Set<Event> events) {

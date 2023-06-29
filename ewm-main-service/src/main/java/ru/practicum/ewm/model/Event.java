@@ -29,7 +29,7 @@ public class Event {
     @ManyToOne(optional = false)
     Category category;
 
-    @Column(name = "created_on" ,nullable = false)
+    @Column(name = "created_on", nullable = false)
     LocalDateTime createdOn;
 
     @Column(nullable = false, length = 7000)
@@ -63,6 +63,6 @@ public class Event {
     Float locationLon;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
     Set<Compilation> compilations;
 }
