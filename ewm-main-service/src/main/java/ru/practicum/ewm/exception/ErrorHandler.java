@@ -18,6 +18,7 @@ public class ErrorHandler {
     @ExceptionHandler({ConstraintViolationException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleWrongRequestParameters(final RuntimeException e) {
+        log.debug("Получен статус 400 Bad request {}", e.getMessage(), e);
         return ApiError.builder()
                 .message(e.getMessage())
                 .reason("Incorrectly made request")
@@ -28,6 +29,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     protected ApiError handleDBConstrainsViolation(final DataIntegrityViolationException e) {
+        log.debug("Получен статус 409 Conflict {}", e.getMessage(), e);
         return ApiError.builder()
                 .status(HttpStatus.CONFLICT)
                 .reason(e.getRootCause().getMessage())
@@ -38,7 +40,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ApiError handleNotFoundException(final NotFoundException e) {
-        log.warn(e.getMessage());
+        log.debug("Получен статус 404 Not found {}", e.getMessage(), e);
         return ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .reason("The required object was not found.")
@@ -49,7 +51,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleWrongDtoFieldValue(final MethodArgumentNotValidException e) {
-        log.warn(e.getMessage());
+        log.debug("Получен статус 400 Bad request {}", e.getMessage(), e);
         return ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .reason("Incorrectly made request.")
@@ -63,6 +65,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     protected ApiError handleRulesViolation(final RulesViolationException e) {
+        log.debug("Получен статус 409 Conflict {}", e.getMessage(), e);
         return ApiError.builder()
                 .message(e.getMessage())
                 .reason("For the requested operation the conditions are not met.")

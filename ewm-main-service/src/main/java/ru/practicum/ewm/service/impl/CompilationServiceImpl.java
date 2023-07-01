@@ -16,14 +16,16 @@ import ru.practicum.ewm.mapper.CompilationMapper;
 import ru.practicum.ewm.mapper.EventMapper;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.model.RequestStatus;
 import ru.practicum.ewm.repository.CompilationRepository;
 import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.repository.ParticipationRequestRepository;
+import ru.practicum.ewm.repository.projection.RequestView;
 import ru.practicum.ewm.service.CompilationService;
+import ru.practicum.ewm.stats.Stats;
+import ru.practicum.ewm.stats.ViewShortDto;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,8 +33,8 @@ import java.util.stream.Collectors;
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
-    @Qualifier(value = "eventService")
-    private final EventServiceImpl eventService;
+    private final ParticipationRequestRepository requestRepository;
+    private final Stats stats;
 
     @Override
     @Transactional
@@ -42,7 +44,7 @@ public class CompilationServiceImpl implements CompilationService {
             List<Long> exists = events.parallelStream().map(Event::getId).collect(Collectors.toUnmodifiableList());
             dto.getEvents().removeAll(exists);
             long eventIdNotExists = dto.getEvents().stream().findAny().get();
-            throw new EventNotFoundException(eventIdNotExists);
+            throw new EventNotFoundException(dto.getEvents());
         }
 
         Compilation comp = compilationRepository.save(CompilationMapper.mapToCompilation(dto, new HashSet<>(events)));
@@ -70,7 +72,7 @@ public class CompilationServiceImpl implements CompilationService {
         if (dto.getPinned() != null) {
             comp.setPinned(dto.getPinned());
         }
-        if (dto.getTitle() != null) {
+        if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
             comp.setTitle(dto.getTitle());
         }
         if (Objects.nonNull(dto.getEvents()) && !dto.getEvents().isEmpty()) {
@@ -110,11 +112,21 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional(readOnly = true)
     private Set<EventShortDto> getEventShortDtos(Compilation comp) {
+        //key = event id, value = counted confirmed requests
+        Map<Long, Long> confirmedRequests = requestRepository.countRequests(
+                        comp.getEvents().stream().map(Event::getId).collect(Collectors.toUnmodifiableList()),
+                        RequestStatus.CONFIRMED).stream()
+                .collect(Collectors.toMap(RequestView::getEventId, RequestView::getCount));
+        //key = event id, value = counted views
+        Map<Long, Long> views = stats.getViewsForEvents(comp.getEvents()).stream()
+                .collect(Collectors.toMap(ViewShortDto::getEventId, ViewShortDto::getViews));
+
         Set<EventShortDto> eventShortDtoSet = comp.getEvents().stream()
                 .map(event -> {
-                    long confirmedRequests = eventService.getConfirmedRequests(event.getId());
-                    long views = eventService.getViews(event.getId());
-                    return EventMapper.mapToEventShortDto(event, confirmedRequests, views);
+                    long eventId = event.getId();
+                    return EventMapper.mapToEventShortDto(event,
+                            confirmedRequests.getOrDefault(eventId, 0L),
+                            views.getOrDefault(eventId, 0L));
                 })
                 .collect(Collectors.toSet());
         return eventShortDtoSet;

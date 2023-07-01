@@ -1,9 +1,7 @@
 package ru.practicum.ewm.dto.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.model.Location;
@@ -14,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventFullDto {
     long id;
     String title;

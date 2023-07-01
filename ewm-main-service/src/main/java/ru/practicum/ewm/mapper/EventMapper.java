@@ -1,10 +1,14 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.cfg.NotYetImplementedException;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.model.*;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class EventMapper {
     public static EventShortDto mapToEventShortDto(Event event, long confirmedRequests, long views) {
         return EventShortDto.builder()
@@ -59,7 +63,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static Event mapToEvent(Event event, UpdateEventUserRequest dto, Category category) {
+    public static Event mapToEvent(Event event, UpdateEventRequest dto, Category category) {
         if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
         if (dto.getTitle() != null) event.setTitle(dto.getTitle());
         if (category != null) event.setCategory(category);
@@ -72,29 +76,19 @@ public class EventMapper {
             event.setLocationLon(dto.getLocation().getLon());
             event.setLocationLat(dto.getLocation().getLat());
         }
-        if (UpdateEventUserRequest.StateAction.CANCEL_REVIEW.equals(dto.getStateAction())) {
-            event.setState(EventState.CANCELED);
-        }
-        if (UpdateEventUserRequest.StateAction.SEND_TO_REVIEW.equals(dto.getStateAction())) {
-            event.setState(EventState.PENDING);
+
+        if (dto instanceof UpdateEventUserRequest) {
+            setState(event, (UpdateEventUserRequest) dto);
+        } else if (dto instanceof UpdateEventAdminRequest) {
+            setState(event, (UpdateEventAdminRequest) dto);
+        } else {
+            throw new NotYetImplementedException();
         }
 
         return event;
     }
 
-    public static Event mapToEvent(Event event, UpdateEventAdminRequest dto, Category category) {
-        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
-        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
-        if (category != null) event.setCategory(category);
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-        if (dto.getLocation() != null) {
-            event.setLocationLon(dto.getLocation().getLon());
-            event.setLocationLat(dto.getLocation().getLat());
-        }
+    private static void setState(Event event, UpdateEventAdminRequest dto) {
         if (UpdateEventAdminRequest.StateAction.REJECT_EVENT.equals(dto.getStateAction())) {
             event.setState(EventState.CANCELED);
         }
@@ -102,7 +96,14 @@ public class EventMapper {
             event.setState(EventState.PUBLISHED);
             event.setPublishedOn(LocalDateTime.now());
         }
+    }
 
-        return event;
+    private static void setState(Event event, UpdateEventUserRequest dto) {
+        if (UpdateEventUserRequest.StateAction.CANCEL_REVIEW.equals(dto.getStateAction())) {
+            event.setState(EventState.CANCELED);
+        }
+        if (UpdateEventUserRequest.StateAction.SEND_TO_REVIEW.equals(dto.getStateAction())) {
+            event.setState(EventState.PENDING);
+        }
     }
 }

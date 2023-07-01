@@ -1,5 +1,7 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
@@ -8,6 +10,7 @@ import ru.practicum.ewm.model.Event;
 
 import java.util.Set;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class CompilationMapper {
     public static Compilation mapToCompilation(NewCompilationDto dto, Set<Event> events) {
         Compilation compilation = new Compilation();

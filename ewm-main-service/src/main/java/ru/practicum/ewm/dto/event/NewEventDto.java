@@ -1,21 +1,25 @@
 package ru.practicum.ewm.dto.event;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.model.Location;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {
     @NotNull
+    @NotBlank
     @Size(min = 3, max = 120)
     String title;
 
     @NotNull
+    @NotBlank
     @Size(min = 20, max = 2000)
     String annotation;
 
@@ -23,6 +27,7 @@ public class NewEventDto {
     Integer category;
 
     @NotNull
+    @NotBlank
     @Size(min = 20, max = 7000)
     String description;
 
@@ -31,11 +36,13 @@ public class NewEventDto {
 
     boolean paid = false;
 
+    @PositiveOrZero
     int participantLimit = 0;
 
     boolean requestModeration = true;
 
     @NotNull
+    @Valid
     Location location;
 
     @AssertTrue(message = "Event must start not earlier than two hours from now")

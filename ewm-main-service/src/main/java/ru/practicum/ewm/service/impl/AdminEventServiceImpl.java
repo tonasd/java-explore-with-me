@@ -29,6 +29,7 @@ import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventFullDto> findEventsWith(
             List<Long> users,
             List<EventState> states,
@@ -55,8 +57,16 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
             int from,
             int size
     ) {
+        List<Event> events = findByCriteria(users, states, categories, rangeStart, rangeEnd, from, size);
+
+        Map<Long, Long> confirmedRequests = getConfirmedRequests(events);
+        Map<Long, Long> views = getViews(events);
+
         return findByCriteria(users, states, categories, rangeStart, rangeEnd, from, size).stream()
-                .map(event -> EventMapper.mapToEventFullDto(event, getConfirmedRequests(event.getId()), getViews(event.getId())))
+                .map(event -> EventMapper.mapToEventFullDto(
+                        event,
+                        confirmedRequests.getOrDefault(event.getId(), 0L),
+                        views.getOrDefault(event.getId(), 0L)))
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -92,20 +102,21 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
         }
 
         event = eventRepository.save(EventMapper.mapToEvent(event, dto, category));
-        return EventMapper.mapToEventFullDto(event, getConfirmedRequests(eventId), getViews(eventId));
+        return EventMapper.mapToEventFullDto(event, getConfirmedRequests(eventId), getViews(event));
     }
 
     /* based on:
      * Criteria API  https://www.baeldung.com/hibernate-criteria-queries
      * Pagination https://www.baeldung.com/jpa-pagination
      */
-    private List<Event> findByCriteria(List<Long> users,
-                                       List<EventState> states,
-                                       List<Integer> categories,
-                                       LocalDateTime rangeStart,
-                                       LocalDateTime rangeEnd,
-                                       int from,
-                                       int size) {
+    private List<Event>
+    findByCriteria(List<Long> users,
+                   List<EventState> states,
+                   List<Integer> categories,
+                   LocalDateTime rangeStart,
+                   LocalDateTime rangeEnd,
+                   int from,
+                   int size) {
 
         Session session = factory.openSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -149,6 +160,7 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
         query.setMaxResults(size);
 
         List<Event> results = query.getResultList();
+        session.close();
         return results;
     }
 }

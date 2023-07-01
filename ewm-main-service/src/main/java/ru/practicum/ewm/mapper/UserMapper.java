@@ -1,10 +1,13 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.dto.user.NewUserRequest;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.model.User;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class UserMapper {
     public static User mapNewUserReuestToUser(NewUserRequest dto) {
         return new User(null, dto.getEmail(), dto.getName());

@@ -1,5 +1,7 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.ewm.dto.event.ParticipationRequestDto;
 import ru.practicum.ewm.model.Event;
@@ -10,6 +12,7 @@ import ru.practicum.ewm.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class RequestMapper {
     public static ParticipationRequestDto map(ParticipationRequest request) {
         return new ParticipationRequestDto(
@@ -26,10 +29,11 @@ public class RequestMapper {
         request.setRequester(requester);
         request.setEvent(event);
         request.setCreated(LocalDateTime.now());
-        if (event.isRequestModeration() && event.getParticipantLimit() != 0) {
-            request.setStatus(RequestStatus.PENDING);
-        } else {
+        //TODO
+        if (!event.isRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(RequestStatus.CONFIRMED);
+        } else {
+            request.setStatus(RequestStatus.PENDING);
         }
 
         return request;

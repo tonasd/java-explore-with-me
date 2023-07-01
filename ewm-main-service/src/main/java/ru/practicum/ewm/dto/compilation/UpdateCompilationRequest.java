@@ -1,6 +1,8 @@
 package ru.practicum.ewm.dto.compilation;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.Pattern;
@@ -8,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateCompilationRequest {
     Boolean pinned;
 
