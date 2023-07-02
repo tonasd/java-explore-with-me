@@ -16,10 +16,9 @@ import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.AdminEventService;
-import ru.practicum.ewm.stats.Stats;
+import ru.practicum.ewm.service.EventHelper;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -29,15 +28,14 @@ import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class AdminEventServiceImpl extends EventServiceImpl implements AdminEventService {
     @Autowired
-    public AdminEventServiceImpl(EventRepository eventRepository, UserRepository userRepository, CategoryRepository categoryRepository, ParticipationRequestRepository requestRepository, SessionFactory factory, Stats stats) {
-        super(eventRepository, userRepository, categoryRepository, requestRepository, factory, stats);
+    public AdminEventServiceImpl(EventRepository eventRepository, UserRepository userRepository, CategoryRepository categoryRepository, SessionFactory factory, EventHelper helper) {
+        super(eventRepository, userRepository, categoryRepository, factory, helper);
     }
 
     private static void checkEventDate(LocalDateTime eventDate) {
@@ -59,14 +57,10 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
     ) {
         List<Event> events = findByCriteria(users, states, categories, rangeStart, rangeEnd, from, size);
 
-        Map<Long, Long> confirmedRequests = getConfirmedRequests(events);
-        Map<Long, Long> views = getViews(events);
+        helper.setConfirmedRequestsAndViews(events);
 
-        return findByCriteria(users, states, categories, rangeStart, rangeEnd, from, size).stream()
-                .map(event -> EventMapper.mapToEventFullDto(
-                        event,
-                        confirmedRequests.getOrDefault(event.getId(), 0L),
-                        views.getOrDefault(event.getId(), 0L)))
+        return events.stream()
+                .map(EventMapper::mapToEventFullDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -102,7 +96,8 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
         }
 
         event = eventRepository.save(EventMapper.mapToEvent(event, dto, category));
-        return EventMapper.mapToEventFullDto(event, getConfirmedRequests(eventId), getViews(event));
+        helper.setConfirmedRequestsAndViews(List.of(event));
+        return EventMapper.mapToEventFullDto(event);
     }
 
     /* based on:

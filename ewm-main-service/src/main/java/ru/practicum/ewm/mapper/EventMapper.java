@@ -10,17 +10,17 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class EventMapper {
-    public static EventShortDto mapToEventShortDto(Event event, long confirmedRequests, long views) {
+    public static EventShortDto mapToEventShortDto(Event event) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .eventDate(event.getEventDate())
-                .confirmedRequests(confirmedRequests)
+                .confirmedRequests(event.getConfirmedRequests())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.mapToCategoryDto(event.getCategory()))
                 .initiator(UserMapper.mapUserToUserShortDto(event.getInitiator()))
                 .paid(event.isPaid())
                 .title(event.getTitle())
-                .views(views)
+                .views(event.getViews())
                 .build();
     }
 
@@ -42,7 +42,7 @@ public class EventMapper {
         return event;
     }
 
-    public static EventFullDto mapToEventFullDto(Event event, long confirmedRequests, long views) {
+    public static EventFullDto mapToEventFullDto(Event event) {
         return EventFullDto.builder()
                 .id(event.getId())
                 .title(event.getTitle())
@@ -53,13 +53,13 @@ public class EventMapper {
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .requestModeration(event.isRequestModeration())
-                .confirmedRequests(confirmedRequests)
+                .confirmedRequests(event.getConfirmedRequests())
                 .createdOn(event.getCreatedOn())
                 .initiator(UserMapper.mapUserToUserShortDto(event.getInitiator()))
                 .publishedOn(event.getPublishedOn())
                 .state(event.getState())
                 .location(new Location(event.getLocationLat(), event.getLocationLon()))
-                .views(views)
+                .views(event.getViews())
                 .build();
     }
 

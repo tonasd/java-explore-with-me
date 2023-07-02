@@ -13,12 +13,10 @@ import java.util.Objects;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {
-    @NotNull
     @NotBlank
     @Size(min = 3, max = 120)
     String title;
 
-    @NotNull
     @NotBlank
     @Size(min = 20, max = 2000)
     String annotation;
@@ -26,7 +24,6 @@ public class NewEventDto {
     @NotNull
     Integer category;
 
-    @NotNull
     @NotBlank
     @Size(min = 20, max = 7000)
     String description;

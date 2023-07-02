@@ -65,4 +65,10 @@ public class Event {
     @ToString.Exclude
     @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
     Set<Compilation> compilations;
+
+    @Transient
+    long confirmedRequests;
+
+    @Transient
+    long views;
 }
