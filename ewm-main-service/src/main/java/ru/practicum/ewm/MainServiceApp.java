@@ -1,11 +1,12 @@
-package ru.practicum.ewm.server;
+package ru.practicum.ewm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServerApp {
+public class MainServiceApp {
+
     public static void main(String[] args) {
-        SpringApplication.run(ServerApp.class, args);
+        SpringApplication.run(MainServiceApp.class, args);
     }
 }
