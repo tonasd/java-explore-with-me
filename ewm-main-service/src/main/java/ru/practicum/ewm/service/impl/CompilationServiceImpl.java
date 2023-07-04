@@ -18,7 +18,10 @@ import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.service.CompilationService;
 import ru.practicum.ewm.service.EventHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +38,6 @@ public class CompilationServiceImpl implements CompilationService {
         if (dto.getEvents().size() != events.size()) {
             List<Long> exists = events.parallelStream().map(Event::getId).collect(Collectors.toUnmodifiableList());
             dto.getEvents().removeAll(exists);
-            long eventIdNotExists = dto.getEvents().stream().findAny().get();
             throw new EventNotFoundException(dto.getEvents());
         }
 
@@ -90,8 +92,10 @@ public class CompilationServiceImpl implements CompilationService {
         }
 
         //fill all events from compilations with views and confirmedRequests values
-        Set<Event> events = comps.stream().flatMap(comp -> comp.getEvents().stream()).collect(Collectors.toSet());
-        helper.setConfirmedRequestsAndViews(new ArrayList<>(events));
+        List<Event> events = comps.stream()
+                .flatMap(comp -> comp.getEvents().stream()).collect(Collectors.toUnmodifiableList());
+        helper.setConfirmedRequestsAndViews(events);
+
 
         return comps.stream()
                 .map(CompilationMapper::mapToCompilationDto)

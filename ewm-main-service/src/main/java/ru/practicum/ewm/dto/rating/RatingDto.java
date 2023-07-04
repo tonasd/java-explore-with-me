@@ -4,7 +4,6 @@ import lombok.Value;
 
 @Value
 public class RatingDto {
-    long participantId;
-    long eventId;
-    boolean isPositive;
+    long likes;
+    long dislikes;
 }

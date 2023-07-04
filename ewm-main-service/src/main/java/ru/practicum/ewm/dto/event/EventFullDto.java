@@ -2,6 +2,7 @@ package ru.practicum.ewm.dto.event;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.dto.rating.RatingDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.model.Location;
@@ -30,4 +31,5 @@ public class EventFullDto {
     EventState state;
     Location location;
     long views;
+    RatingDto rating;
 }

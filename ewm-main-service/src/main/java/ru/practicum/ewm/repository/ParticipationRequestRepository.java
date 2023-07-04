@@ -7,7 +7,6 @@ import ru.practicum.ewm.model.ParticipationRequest;
 import ru.practicum.ewm.model.RequestStatus;
 import ru.practicum.ewm.repository.projection.RequestView;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;

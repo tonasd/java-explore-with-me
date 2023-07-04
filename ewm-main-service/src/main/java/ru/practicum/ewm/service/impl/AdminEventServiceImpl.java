@@ -58,6 +58,7 @@ public class AdminEventServiceImpl extends EventServiceImpl implements AdminEven
         List<Event> events = findByCriteria(users, states, categories, rangeStart, rangeEnd, from, size);
 
         helper.setConfirmedRequestsAndViews(events);
+        helper.setRating(events);
 
         return events.stream()
                 .map(EventMapper::mapToEventFullDto)

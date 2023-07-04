@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.model.EventState;
+import ru.practicum.ewm.repository.projection.RatingTopView;
 import ru.practicum.ewm.service.EventService;
+import ru.practicum.ewm.service.RatingService;
 import ru.practicum.ewm.stats.Stats;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
@@ -27,6 +30,7 @@ import java.util.Objects;
 public class PublicEventController {
     private final EventService eventService;
     private final Stats stats;
+    private final RatingService ratingService;
 
     @GetMapping
     public List<EventShortDto> findAll(
@@ -63,6 +67,13 @@ public class PublicEventController {
         stats.saveRequest(request);
 
         return eventService.findEvent(id, EventState.PUBLISHED);
+    }
+
+    @GetMapping("/top")
+    public List<RatingTopView> findTopEvents(@RequestParam(defaultValue = "10") @Max(100) int size) {
+        log.info("GET /events/top{}", size);
+
+        return ratingService.findTopEvents(size);
     }
 
 }

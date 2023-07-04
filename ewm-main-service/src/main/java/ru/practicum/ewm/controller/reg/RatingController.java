@@ -2,9 +2,11 @@ package ru.practicum.ewm.controller.reg;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.rating.RatingDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.ewm.dto.rating.RatingCreationDto;
 import ru.practicum.ewm.service.RatingService;
 
 @Slf4j
@@ -15,7 +17,7 @@ public class RatingController {
     private final RatingService service;
 
     @PutMapping("/like/{eventId}")
-    public RatingDto like(
+    public RatingCreationDto like(
             @PathVariable long userId,
             @PathVariable long eventId
     ) {
@@ -25,7 +27,7 @@ public class RatingController {
     }
 
     @PutMapping("/dislike/{eventId}")
-    public RatingDto dislike(
+    public RatingCreationDto dislike(
             @PathVariable long userId,
             @PathVariable long eventId
     ) {
