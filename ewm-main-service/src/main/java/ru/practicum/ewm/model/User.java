@@ -2,6 +2,7 @@ package ru.practicum.ewm.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.repository.projection.UserRatingView;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -24,6 +25,9 @@ public class User {
 
     @Column(nullable = false, length = 250)
     String name;
+
+    @Transient
+    UserRatingView rating;
 
     @Override
     public boolean equals(Object o) {

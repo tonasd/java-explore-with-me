@@ -7,7 +7,7 @@ import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.RequestStatus;
 import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.RatingRepository;
-import ru.practicum.ewm.repository.projection.RatingView;
+import ru.practicum.ewm.repository.projection.EventRatingView;
 import ru.practicum.ewm.repository.projection.RequestView;
 import ru.practicum.ewm.stats.Stats;
 import ru.practicum.ewm.stats.ViewShortDto;
@@ -45,11 +45,11 @@ public class EventHelper {
 
     @Transactional(readOnly = true)
     public void setRating(List<Event> events) {
-        Map<Long, RatingView> ratings = ratingRepository.getRatingFor(events.stream()
+        Map<Long, EventRatingView> ratings = ratingRepository.getRatingForEvents(events.stream()
                         // there can be no rating for not started yet event, no need to fetch data for them
                         .filter(event -> event.getEventDate().isBefore(LocalDateTime.now()))
                         .map(Event::getId).collect(Collectors.toUnmodifiableList()))
-                .collect(Collectors.toMap(RatingView::getEventId, Function.identity()));
+                .collect(Collectors.toMap(EventRatingView::getEventId, Function.identity()));
 
         events.forEach(event -> event.setRating(ratings.get(event.getId())));
     }
