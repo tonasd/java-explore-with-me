@@ -24,7 +24,7 @@ public class Rating {
     long eventId;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "participant_id", insertable=false, updatable=false)
+    @JoinColumn(name = "participant_id", insertable = false, updatable = false)
     @ToString.Exclude
     transient User participant;
 
@@ -43,7 +43,8 @@ public class Rating {
     }
 
     @EqualsAndHashCode
-    @Getter @Setter
+    @Getter
+    @Setter
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor
