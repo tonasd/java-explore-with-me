@@ -60,6 +60,7 @@ public class EventMapper {
                 .state(event.getState())
                 .location(new Location(event.getLocationLat(), event.getLocationLon()))
                 .views(event.getViews())
+                .rating(RatingMapper.mapToRatingDto(event.getRating()))
                 .build();
     }
 

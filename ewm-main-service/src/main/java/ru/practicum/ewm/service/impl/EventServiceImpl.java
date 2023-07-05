@@ -113,6 +113,7 @@ public class EventServiceImpl implements EventService {
             throw new EventNotFoundException(eventId);
         }
         helper.setConfirmedRequestsAndViews(List.of(event));
+        helper.setRating(List.of(event));
 
         return EventMapper.mapToEventFullDto(event);
     }
@@ -125,6 +126,7 @@ public class EventServiceImpl implements EventService {
             throw new EventNotFoundException(id);
         }
         helper.setConfirmedRequestsAndViews(List.of(event));
+        helper.setRating(List.of(event));
 
         return EventMapper.mapToEventFullDto(event);
     }

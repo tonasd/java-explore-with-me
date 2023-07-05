@@ -2,6 +2,7 @@ package ru.practicum.ewm.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.repository.projection.EventRatingView;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -71,4 +72,7 @@ public class Event {
 
     @Transient
     long views;
+
+    @Transient
+    EventRatingView rating;
 }

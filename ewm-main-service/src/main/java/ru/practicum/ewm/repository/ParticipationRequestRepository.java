@@ -32,4 +32,12 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
     List<RequestView> countRequests(Collection<Long> eventsId, @Param("status") RequestStatus requestStatus);
 
     Stream<ParticipationRequest> findAllByEventIdAndStatusIs(long eventId, RequestStatus requestStatus);
+
+    @Query(value = "SELECT count(*) > 0 " +
+            "FROM ParticipationRequest AS pr " +
+            "WHERE pr.requester.id = :participantId " +
+            "AND pr.event.id = :eventId " +
+            "AND pr.status = 'CONFIRMED' " +
+            "AND pr.event.eventDate < CURRENT_TIMESTAMP")
+    boolean eventCanBeRated(long participantId, long eventId);
 }

@@ -109,3 +109,18 @@ CREATE table IF NOT EXISTS public.compilation_event (
 
 COMMENT ON COLUMN public.compilation_event.compilation_id IS 'Внешний ключ на идентификатор подборки';
 COMMENT ON COLUMN public.compilation_event.event_id IS 'Внешний ключ на идентификатор события';
+
+CREATE table IF NOT EXISTS public.events_rating (
+	participant_id bigint NOT NULL,
+	event_id bigint NOT NULL,
+	positive boolean NOT NULL,
+	CONSTRAINT events_rating_pk PRIMARY KEY (participant_id,event_id),
+	CONSTRAINT events_rating_fk_event FOREIGN KEY (event_id) REFERENCES public.events(id),
+	CONSTRAINT events_rating_fk_user FOREIGN KEY (participant_id) REFERENCES public.users(id)
+);
+
+-- Column comments
+
+COMMENT ON COLUMN public.events_rating.participant_id IS 'Идентификатор пользователя оставившего оценку';
+COMMENT ON COLUMN public.events_rating.event_id IS 'Идентификатор события для которого ставится оценка';
+COMMENT ON COLUMN public.events_rating.positive IS 'Отзыв, если true, то положительный = like иначе отрицательный=dislike';

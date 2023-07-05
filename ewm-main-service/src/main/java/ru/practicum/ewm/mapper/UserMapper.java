@@ -2,6 +2,7 @@ package ru.practicum.ewm.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.ewm.dto.rating.RatingDto;
 import ru.practicum.ewm.dto.user.NewUserRequest;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
@@ -10,7 +11,7 @@ import ru.practicum.ewm.model.User;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)  // @UtilityClass as another version to restrict creation
 public class UserMapper {
     public static User mapNewUserReuestToUser(NewUserRequest dto) {
-        return new User(null, dto.getEmail(), dto.getName());
+        return new User(null, dto.getEmail(), dto.getName(), null);
     }
 
     public static UserDto mapUserToUserDto(User user) {
@@ -18,6 +19,9 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());
+        if (user.getRating() != null) {
+            dto.setRating(new RatingDto(user.getRating().getLikes(), user.getRating().getDislikes()));
+        }
 
         return  dto;
     }
